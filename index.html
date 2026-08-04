@@ -1,1 +1,334 @@
-<h1>P&P ทะเลเผา</h1>
+```html
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>P&P ทะเลเผา</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:'Tahoma',sans-serif;
+}
+
+body{
+    margin:0;
+    background:#fff7e6;
+}
+
+header{
+    background:linear-gradient(135deg,#ff6b00,#ff0000);
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+header h1{
+    margin:0;
+    font-size:35px;
+}
+
+header p{
+    font-size:18px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:15px;
+    box-shadow:0 3px 10px #ccc;
+    text-align:center;
+}
+
+.card h3{
+    color:#e65100;
+}
+
+.price{
+    font-size:20px;
+    font-weight:bold;
+}
+
+button{
+    background:#ff5722;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#d84315;
+}
+
+.cart{
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+}
+
+input,textarea{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+.total{
+    font-size:22px;
+    color:red;
+    font-weight:bold;
+}
+
+.line-btn{
+    width:100%;
+    font-size:20px;
+    background:#06c755;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>P&P ทะเลเผา 🦐🔥</h1>
+<p>กุ้ง หมึก หอย น้ำจิ้มซีฟู้ดรสเด็ด มะนาวแท้ 100%</p>
+<p>เปิดทุกวัน 15:00 - 21:00</p>
+</header>
+
+
+<div class="container">
+
+
+<h2>🍤 เมนูอาหาร</h2>
+
+<div class="menu">
+
+
+<div class="card">
+<h3>กุ้งเสียบไม้</h3>
+<p class="price">12 บาท</p>
+<button onclick="add('กุ้งเสียบไม้',12)">เพิ่ม</button>
+</div>
+
+
+<div class="card">
+<h3>หมึกย่าง</h3>
+<p class="price">10 บาท</p>
+<button onclick="add('หมึกย่าง',10)">เพิ่ม</button>
+</div>
+
+
+<div class="card">
+<h3>หอยเชลล์ย่าง</h3>
+<p class="price">20 บาท</p>
+<button onclick="add('หอยเชลล์ย่าง',20)">เพิ่ม</button>
+</div>
+
+
+<div class="card">
+<h3>หอยหวาน</h3>
+<p class="price">100 บาท</p>
+<button onclick="add('หอยหวาน ครึ่งกิโล',100)">เพิ่ม</button>
+</div>
+
+
+<div class="card">
+<h3>กุ้งย่างชีส</h3>
+<p class="price">35 บาท</p>
+<button onclick="add('กุ้งย่างชีส',35)">เพิ่ม</button>
+</div>
+
+
+<div class="card">
+<h3>หอยเชลล์ย่างชีส</h3>
+<p class="price">25 บาท</p>
+<button onclick="add('หอยเชลล์ย่างชีส',25)">เพิ่ม</button>
+</div>
+
+
+</div>
+
+
+<div class="cart">
+
+<h2>🛒 รายการสั่งซื้อ</h2>
+
+<div id="list">
+ยังไม่มีสินค้า
+</div>
+
+<p class="total">
+รวมทั้งหมด: <span id="total">0</span> บาท
+</p>
+
+
+<h2>ข้อมูลลูกค้า</h2>
+
+<input id="name" placeholder="ชื่อผู้สั่ง">
+
+<input id="phone" placeholder="เบอร์โทร">
+
+<textarea id="address" placeholder="ที่อยู่จัดส่ง"></textarea>
+
+<textarea id="note" placeholder="หมายเหตุ"></textarea>
+
+
+<button class="line-btn" onclick="sendLine()">
+ส่งออเดอร์ผ่าน LINE OA
+</button>
+
+
+</div>
+
+
+</div>
+
+
+<footer>
+P&P ทะเลเผา ❤️
+<br>
+โทร 0969030676 | 0955480882
+</footer>
+
+
+<script>
+
+let cart=[];
+let total=0;
+
+
+function add(name,price){
+
+let item=cart.find(x=>x.name==name);
+
+if(item){
+    item.qty++;
+}else{
+    cart.push({
+        name:name,
+        price:price,
+        qty:1
+    });
+}
+
+render();
+
+}
+
+
+function render(){
+
+let html="";
+
+total=0;
+
+
+cart.forEach(item=>{
+
+let sum=item.price*item.qty;
+
+total+=sum;
+
+html+=`
+<p>
+${item.name} x ${item.qty}
+= ${sum} บาท
+</p>
+`;
+
+});
+
+
+document.getElementById("list").innerHTML =
+html || "ยังไม่มีสินค้า";
+
+
+document.getElementById("total").innerHTML=total;
+
+}
+
+
+
+function sendLine(){
+
+let msg=
+"P&P ทะเลเผา 🦐🔥%0A%0A";
+
+cart.forEach(item=>{
+
+msg +=
+item.name+
+" x "+
+item.qty+
+" = "+
+(item.price*item.qty)+
+" บาท%0A";
+
+});
+
+
+msg+=
+"%0Aรวม "+
+total+
+" บาท%0A%0A";
+
+
+msg+=
+"ลูกค้า: "+
+document.getElementById("name").value+
+"%0A";
+
+msg+=
+"เบอร์: "+
+document.getElementById("phone").value+
+"%0A";
+
+msg+=
+"ที่อยู่: "+
+document.getElementById("address").value+
+"%0A";
+
+msg+=
+"หมายเหตุ: "+
+document.getElementById("note").value;
+
+
+window.open(
+"https://line.me/R/ti/p/@YOUR_LINE_ID?text="+msg,
+"_blank"
+);
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>
+```
